@@ -17,8 +17,6 @@ with any fixes if you find any issues. The code has been tested on Android
 Studio 0.5.1. Versions < 0.5 don't have support for the XML transition
 resources.
 
-
-
 ## Scenes and the TransitionManager
 
 The fundamental concept of the Transition framework is that the current state
@@ -126,7 +124,7 @@ previously.
 If you run the app up in this state, and flip between the tabs then you'll see
 that moving between tabs involves the content automatically animating:
 
-![Transitions without content](images/chapter6/transition_no_content.gif)
+![Transitions without content](images/transition_no_content.png)
 
 You haven't specified anything about how the transitions should animate yet,
 and in this case then the `TransitionManager` will use the default
@@ -217,7 +215,7 @@ Adding this to the loop in which we create the `Scene` objects will ensure that
 the content is loaded before the transition takes place, and if you tun the app
 up now you'll see that the content is fully loaded:
 
-![Simple transitions](images/chapter6/simple_transitions.gif)
+![Simple transitions](images/simple_transitions.png)
 
 
 ## Custom transitions with TransitionSets
@@ -294,7 +292,7 @@ domain. There are a selection of different interpolators provided as part of
 the framework, including `AccelerateDecelerateInterpolator` and
 `AnticipateOvershootInterpolator`; here we're using a `BounceInterpolator`:
 
-![Bounce transition](images/chapter6/transition_with_bounce.gif)
+![Bounce transition](images/transition_with_bounce.png)
 
 
 ## Using XML resources for transitions
@@ -412,7 +410,7 @@ If you run the app up now then you'll see that some of the transitions will
 behave according to the original bouncy transition, and some the new
 simultaneous bounce transition:
 
-![Both types of transition](images/chapter6/transitions_2_types.gif)
+![Both types of transition](images/transitions_2_types.png)
 
 
 ## Conclusion

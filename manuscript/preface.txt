@@ -1,0 +1,35 @@
+# Preface
+
+
+
+
+
+If you have any comments or corrections for the book then do let me know - I'm
+[@iwantmyrealname](https://twitter.com/iwantmyrealname) on twitter.
+
+## Audience
+
+
+
+## Book layout
+
+This book is a collection of weekly blog posts, which on the most-part stand
+alone. There are one or two which cross-reference each other, but they can
+be read entirely independently.
+
+The chapters aren't meant to be complete tutorials, and as such, the code snippets
+within each chapter usually just highlight the more salient bits of code associated
+with a particular step. However, each chapter has an accompanying working app, the
+source code for which can be found on GitHub.
+
+## Source code
+
+The GitHub repository at 
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat)
+contains projects which accompany each chapter.
+
+The projects are all built using Android Studio 0.4.4, and should run straight
+after downloading. Any pull-requests for fixes and improvements will be greatly
+appreciated!
+
+![Logo](images/logo_big.png)
