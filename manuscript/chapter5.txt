@@ -21,7 +21,7 @@ and are accessed using the `getMeasurementPeakRms()` method. In order to get
 regularly updating measurement values, we'll create a class which regularly
 requests these measurement values and then publishes them - `SamplingSoundMeter`:
 
-### Building the SamplingSoundMeter
+## Building the SamplingSoundMeter
 
 The `SamplingSoundMeter` class has a constructor which takes just one argument -
 a so-called `SoundLevelUpdateable` object. We'll take a look at this interface in
@@ -196,7 +196,7 @@ volume is changed:
 ![SoundMeter quiet sounds](images/chapter5/sound_meter_quiet.png)
 ![SoundMeter loud sounds](images/chapter5/sound_meter_loud.png)
 
-### Conclusion
+## Conclusion
 
 This is a relatively simple addition to the `visualizer` class, allowing you to
 perform simple measurements on live audio output sessions, but it can actually

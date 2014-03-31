@@ -7,7 +7,7 @@ are viewing or interacting with. Examples include e-book readers, video players,
 games and drawing apps. Before KitKat, although there was support for a 
 fullscreen mode, KitKat introduces 2 new immersive modes.
 
-In this post we'll take a look at 3 different full-screen modes, and discuss
+In this chapter we'll take a look at 3 different full-screen modes, and discuss
 times when you might want to use them. There's an accompanying app which
 demonstrates how to use the different modes and what they might be used for. The
 source code is available on Github
@@ -47,7 +47,7 @@ We set the mode using a combination of flags and the `setSystemUiVisibility()`
 method on the decor view. The following flags are of interest for leanback mode:
 
 - `SYSTEM_UI_FLAG_LAYOUT_STABLE` ensure that a stable layout size is provided to
-`fitSystemWindows()` method. This means that as the appearance of transient
+the `fitSystemWindows()` method. This means that as the appearance of transient
 chrome changes then the layout of the underlying content should remain stable.
 - `SYSTEM_UI_FLAG_FULLSCREEN` hide the status bar, action bar and other non-critical
 screen adornments.
@@ -61,6 +61,7 @@ the screen out as if it is in fullscreen mode.
 
 The following method is used to enable/disable fullscreen mode:
 
+{lang=java}
     protected void enableFullScreen(boolean enabled) {
         int newVisibility =  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -86,6 +87,7 @@ to actually hide the navigation and enable full-screen.
 We set the new visibility on the decor view, which is supplied by the `getDecorView()`
 method:
 
+{lang=java}
     private View getDecorView() {
         return getWindow().getDecorView();
     }
@@ -97,8 +99,9 @@ get the leanback experience of the UI disappearing again after a period of time
 then we we will listen for UI visibility changes and start a hide timer when one
 occurs:
 
-    public class LeanBackActivity extends AbstractFullScreenLayoutActivity implements
-        View.OnSystemUiVisibilityChangeListener {
+{lang=java}
+    public class LeanBackActivity extends AbstractFullScreenLayoutActivity
+                            implements View.OnSystemUiVisibilityChangeListener {
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ occurs:
 
 and provide an implementation for the `onSystemUiVisibilityChange()` method:
 
+{lang=java}
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
         if((mLastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
@@ -123,6 +127,7 @@ Here, we're checking to find out whether the change in visibility represents the
 appearance of the navigation (i.e. from hidden to visible), and if it is then we
 start a timer to make the chrome hide again:
 
+{lang=java}
     private void resetHideTimer() {
         // First cancel any queued events - i.e. resetting the countdown clock
         mLeanBackHandler.removeCallbacks(mEnterLeanback);
@@ -133,6 +138,7 @@ start a timer to make the chrome hide again:
 where `mLeanBackHandler` and `mEnterLeanback` are defined as follows:
 
 
+{lang=java}
     private final Handler mLeanBackHandler = new Handler();
     private final Runnable mEnterLeanback = new Runnable() {
         @Override
@@ -147,6 +153,7 @@ could add a call to `resetHideTimer()` as part of the tap handler, but since
 we don't have any controls here, we'll add a `ClickListener` to the main content
 view:
 
+{lang=java}
     protected void onCreate(Bundle savedInstanceState) {
         ...
         getMainView().setOnClickListener(this);
@@ -154,6 +161,7 @@ view:
 
 And reset the timer when a click is performed:
 
+{lang=java}
     @Override
     public void onClick(View v) {
         // If the `mainView` receives a click event then reset the leanback-mode clock
@@ -181,6 +189,7 @@ as visibility change triggers.
 
 The following demonstrates the use of these flags to set visibility:
 
+{lang=java}
     protected void enableFullScreen(boolean enabled) {
         int newVisibility =  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -210,6 +219,7 @@ the system UI chrome will reappear. This will involve a call to `onSystemUiVisib
 of the relevant listener. In the accompanying demo app, we use this as an opportunity
 to display a button which allows the user to re-enter immersive mode:
 
+{lang=java}
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
         Button immersiveButton = (Button)findViewById(R.id.enableImmersiveButton);
@@ -223,6 +233,7 @@ to display a button which allows the user to re-enter immersive mode:
 
 With the click handler simply calling our `enableFullScreen()` method:
 
+{lang=java}
     public void immersiveButtonClickHandler(View view) {
         enableFullScreen(true);
     }
@@ -254,6 +265,7 @@ and it will return to immersive mode after a short time.
 
 Therefore, our `enableFullScreen()` method becomes the following:
 
+{lang=java}
     @Override
     protected void enableFullScreen(boolean enabled) {
         int newVisibility =  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
