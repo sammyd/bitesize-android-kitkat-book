@@ -46,8 +46,8 @@ want here, so we have to create it ourself.
 We set the mode using a combination of flags and the `setSystemUiVisibility()`
 method on the decor view. The following flags are of interest for leanback mode:
 
-- `SYSTEM_UI_FLAG_LAYOUT_STABLE` ensure that a stable layout size is provided to
-the `fitSystemWindows()` method. This means that as the appearance of transient
+- `SYSTEM_UI_FLAG_LAYOUT_STABLE` provide a stable layout size to
+`fitSystemWindows()` method. This means that as the appearance of transient
 chrome changes then the layout of the underlying content should remain stable.
 - `SYSTEM_UI_FLAG_FULLSCREEN` hide the status bar, action bar and other non-critical
 screen adornments.

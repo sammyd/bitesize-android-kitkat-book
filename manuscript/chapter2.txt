@@ -13,7 +13,8 @@ In this article we'll take a look at how to create content to provide to the
 print service - at how to add printing capabilities to your KitKat-enabled app.
 
 There is an accompanying demo app with complete source code available on GitHub - 
-at GITHUB_LINK_HERE. It was written and tested in AndroidStudio 0.4.4, so you
+at [github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
+It was written and tested in AndroidStudio 0.4.4, so you
 should be able to get it running as a gradle project in either AndroidStudio or
 Eclipse.
 
@@ -31,6 +32,7 @@ photos for a photo printer or the suchlike. The Android support library includes
 a `PrintHelper` class which enables the printing of images. The following code
 snippet (attached to a button's `onClickListener`) demonstrates how to use it:
 
+{lang=java}
     PrintHelper printHelper = new PrintHelper(getActivity());
     printHelper.setScaleMode(PrintHelper.SCALE_MODE_FIT);
     // Get the image
@@ -55,6 +57,7 @@ the `printBitmap` method is called on the `PrintHelper` object, passing in a
 
 The `getBitmap()` method is as follows:
 
+{lang=java}
     public Bitmap getImage() {
         ImageView imageView = (ImageView) getView().findViewById(R.id.imageView);
         Bitmap image = null;
@@ -126,6 +129,7 @@ The simple adapter we'll build today will be able to print any object which cont
 an image and some text. In order to describe such objects we'll create a interface:
 `imageAndTextContainer`:
 
+{lang=java}
     public interface ImageAndTextContainer {
         public String getText();
         public Bitmap getImage();
@@ -135,6 +139,7 @@ Very simple interface which defines a way of obtaining a `Bitmap` for an image a
 a `String` of text. When we create a print document adapter, we'll require one of
 these containers, as well as a `Context` object:
 
+{lang=java}
     public class PrintShopPrintDocumentAdapter extends PrintDocumentAdapter {
 
         private ImageAndTextContainer imageAndTextContainer;
@@ -142,7 +147,8 @@ these containers, as well as a `Context` object:
         private int pageCount;
         private PrintedPdfDocument pdfDocument;
 
-        public PrintShopPrintDocumentAdapter(ImageAndTextContainer container, Context cxt) {
+        public PrintShopPrintDocumentAdapter(ImageAndTextContainer container,
+                                             Context cxt) {
             imageAndTextContainer = container;
             context = cxt;
         }
@@ -155,6 +161,7 @@ writing operations.
 Since we want to print the fragment we've already seen, we need to ensure that it
 implements this new `ImageAndTextContainer` interface:
 
+{lang=java}
     public class PrintDemoFragment extends Fragment implements ImageAndTextContainer {
 
         ...
@@ -167,12 +174,12 @@ implements this new `ImageAndTextContainer` interface:
 
         @Override
         public Bitmap getImage() {
-            ImageView imageView = (ImageView) getView().findViewById(R.id.imageView);
+            ImageView iView = (ImageView) getView().findViewById(R.id.imageView);
             Bitmap image = null;
             // Get the image
-            if ((imageView.getDrawable()) != null) {
+            if ((iView.getDrawable()) != null) {
                 // Send it to the print helper
-                image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                image = ((BitmapDrawable) iView.getDrawable()).getBitmap();
             }
             return image;
         }
@@ -194,11 +201,17 @@ such as the number of pages in the document.
 
 Let's take a look at the completed method and then work though the constituent parts:
 
+{lang=java}
     @Override
-    public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, final LayoutResultCallback callback, Bundle extras) {
+    public void onLayout(PrintAttributes oldAttributes,
+                         PrintAttributes newAttributes,
+                         CancellationSignal cancellationSignal,
+                         final LayoutResultCallback callback,
+                         Bundle extras) {
 
         // Register a cancellation listener
-        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+        cancellationSignal.setOnCancelListener(
+                                        new CancellationSignal.OnCancelListener() {
             @Override
             public void onCancel() {
                 callback.onLayoutCancelled();
@@ -273,11 +286,16 @@ print button, and that'll call `onWrite()` on the print adapter.
 
 We'll take a look at what this method does in small chunks:
 
+{lang=java}
     @Override
-    public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, final WriteResultCallback callback) {
+    public void onWrite(PageRange[] pages,
+                        ParcelFileDescriptor destination,
+                        CancellationSignal cancellationSignal,
+                        final WriteResultCallback callback) {
 
         // Register a cancellation listener
-        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+        cancellationSignal.setOnCancelListener(
+                                        new CancellationSignal.OnCancelListener() {
             @Override
             public void onCancel() {
                 // If cancelled then ensure that the PDF doc gets thrown away
@@ -298,22 +316,23 @@ user cancel the print job, we can stop what we're doing and tidy up.
 Next, we'll actually draw each of the pages of the print job, looping through
 them one at a time:
 
+{lang=java}
     // Iterate through the pages
-    for (int currentPageNumber = 0; currentPageNumber < pageCount; currentPageNumber++) {
+    for (int currentPageNo = 0; currentPageNo < pageCount; currentPageNo++) {
         // Has this page been requested?
-        if(!pageRangesContainPage(currentPageNumber, pages)) {
+        if(!pageRangesContainPage(currentPageNo, pages)) {
             // Skip this page
             continue;
         }
 
         // Start the current page
-        PdfDocument.Page page = pdfDocument.startPage(currentPageNumber);
+        PdfDocument.Page page = pdfDocument.startPage(currentPageNo);
 
         // Get the canvas for this page
         Canvas canvas = page.getCanvas();
 
         // Draw on the page
-        drawPage(currentPageNumber, canvas);
+        drawPage(currentPageNo, canvas);
 
         // Finish the page
         pdfDocument.finishPage(page);
@@ -325,6 +344,7 @@ order to determine whether the current page should be drawn, the following helpe
 method checks to see whether the given page number exists within an array of
 page ranges:
 
+{lang=java}
     private boolean pageRangesContainPage(int pageNumber, PageRange[] ranges)
     {
         for(PageRange range : ranges) {
@@ -344,16 +364,21 @@ the page has been completed, the page should be completed with `finishPage()`.
 The difficult part of creating the PDF is actually hidden behind the `drawPage()`
 method, which gives an idea of how it can be achieved:
 
+{lang=java}
     private void drawPage(int pageNumber, Canvas canvas) {
         if(pageCount == 1) {
             // We're putting everything on one page
-            Rect imageRect = new Rect(10, 10, canvas.getWidth() - 10, canvas.getHeight() / 2 - 10);
+            Rect imageRect = new Rect(10, 10, canvas.getWidth() - 10,
+                                      canvas.getHeight() / 2 - 10);
             drawImage(imageAndTextContainer.getImage(), canvas, imageRect);
-            Rect textRect = new Rect(10, canvas.getHeight() / 2 + 10, canvas.getWidth() - 10, canvas.getHeight() - 10);
+            Rect textRect = new Rect(10, canvas.getHeight() / 2 + 10,
+                                     canvas.getWidth() - 10,
+                                     canvas.getHeight() - 10);
             drawText(imageAndTextContainer.getText(), canvas, textRect);
         } else {
             // Same rect for image and text
-            Rect contentRect = new Rect(10, 10, canvas.getWidth() - 10, canvas.getHeight() - 10);
+            Rect contentRect = new Rect(10, 10, canvas.getWidth() - 10,
+                                        canvas.getHeight() - 10);
             // Image on page 0, text on page 1
             if(pageNumber == 0) {
                 drawImage(imageAndTextContainer.getImage(), canvas, contentRect);
@@ -371,11 +396,14 @@ laying out and drawing of the document to that.
 Once the frames of the individual components has been calculated, the following
 helper methods are used to actually draw the content:
 
+{lang=java}
     private void drawText(String text, Canvas canvas, Rect rect) {
         TextPaint paint = new TextPaint();
         paint.setColor(Color.BLACK);
 
-        StaticLayout sl = new StaticLayout(text, paint, (int)rect.width(), Layout.Alignment.ALIGN_CENTER, 1, 1, false);
+        StaticLayout sl = new StaticLayout(text, paint, (int)rect.width(),
+                                           Layout.Alignment.ALIGN_CENTER, 1, 1,
+                                           false);
 
         canvas.save();
         canvas.translate(rect.left, rect.top);
@@ -393,6 +421,7 @@ Text rendering is performed using a `StaticLayout`, and image rendering using th
 The final part of the `onWrite()` method in our print adapter is to take the PDF
 document we've created and attempt to write it to the print service:
 
+{lang=java}
     // Attempt to send the completed doc out
     try {
         pdfDocument.writeTo(new FileOutputStream(destination.getFileDescriptor()));
@@ -418,14 +447,19 @@ on the outcome of this attempt we either callback `onWriteFailed()` or
 Now that we've created the print adapter, it's really easy to use it. As the
 `onOnClick` callback for a button, we provide the following implementation:
 
+{lang=java}
     final ImageAndTextContainer imageAndTextContainer = this;
-    rootView.findViewById(R.id.print_page_button).setOnClickListener(new View.OnClickListener() {
+    rootView.findViewById(R.id.print_page_button)
+            .setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             // Create a PrintDocumentAdapter
-            PrintShopPrintDocumentAdapter adapter = new PrintShopPrintDocumentAdapter(imageAndTextContainer, getActivity());
+            PrintShopPrintDocumentAdapter adapter =
+                        new PrintShopPrintDocumentAdapter(imageAndTextContainer,
+                                                          getActivity());
             // Get the print manager from the context
-            PrintManager printManager = (PrintManager)getActivity().getSystemService(Context.PRINT_SERVICE);
+            PrintManager printManager = (PrintManager)getActivity()
+                                        .getSystemService(Context.PRINT_SERVICE);
             // And print the document
             printManager.print("PrintShop", adapter, null);
         }
@@ -456,7 +490,8 @@ another side to the framework - adding support for devices so they can register
 themselves with the printing framework. For more information, check out the
 pages about `android.printservice` on [developer.android.com](http://developer.android.com/reference/android/printservice/package-summary.html).
 
-The code for the accompanying project is available on GitHub as part of the
-KitKat: finger-by-finger project. Go grab it and give it a try - let me know if
-you have any comments or feedback - either in the comments section below, on
+The code for the accompanying project is available on GitHub at
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
+Go grab it and give it a try - let me know if
+you have any comments or feedback on
 GitHub or on twitter [@iwantmyrealname](https://twitter.com/iwantmyrealname). 
