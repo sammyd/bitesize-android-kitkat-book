@@ -1,6 +1,15 @@
 # Afterword
 
-...
+I hope that you've enjoyed reading this book, and that you've either learnt
+something or been inspired to try out some of the new features available in
+KitKat. Although the adoption rates of KitKat aren't as high as developers might
+like, that doesn't mean that it's not worth putting in some effort to discover
+what new opportunities are available, and to think about the ways we can use them
+to improve our existing apps. 
+
+This book looked at 6 of the headline new features introduced in KitKat, but there
+were a few others. If you're interested in reading more, then the best place to
+start is the official documentation, which gives details of the new features.
 
 If you have any feedback about the book or its content then I'd love to hear it - 
 hit me up on twitter at [@iwantmyrealname](https://twitter.com/iwantmyrealname),
@@ -10,3 +19,16 @@ or email me [sdavies@shinobicontrols.com](mailto:sdavies@shinobicontrols.com).
 ## Useful Links
 
 I've compiled a few useful links of interest, for further reading:
+
+- [shinobicontrols.com](http://www.shinobicontrols.com/) Creators of the finest
+UI controls for Android (and iOS). Made this book possible - you should check them
+out - they're amazing.
+- [developer.android.com](http://developer.android.com/) It's a fairly obvious
+link, but there's loads of good stuff on here. The docs are pretty good, so if you
+want to find out more info about any of the things you've read about in the book,
+then this is the place to start.
+- [Android Development on G+](https://plus.google.com/communities/105153134372062985968)
+An incredibly active resource for discovering what's happening in the world of
+Android.
+- [genymotion.com](http://www.genymotion.com/) An incredibly fast Android emulator.
+Without this, Android development is painful - highly recommended.
