@@ -30,6 +30,7 @@ resources which we'll use for the two scenes. The first is a simple
 `LinearLayout` which contains an image, a title label and a larger content text
 view:
 
+{lang=xml}
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -57,6 +58,7 @@ view:
 
 And the second has just an image and the same text view for content:
 
+{lang=xml}
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -89,6 +91,7 @@ transitions.
 
 The following code creates an `ArrayList` of `Scene` objects:
 
+{lang=java}
     // Get hold of some relevant content
     final ViewGroup container = (ViewGroup)findViewById(R.id.container);
 
@@ -115,6 +118,7 @@ the transitions will occur.
 
 The `TransitionManager` is used to actually perform the transition:
 
+{lang=java}
     TransitionManager.go(sceneList.get(tab.getPosition()));
 
 Here the static `go()` method is being used. It has one argument, and it takes
@@ -141,6 +145,7 @@ but this isn't a very sensible approach - a layout should be content
 independent, both for reuse reasons, and internationalization. Therefore, we've
 defined the following strings in __values/strings.xml__:
 
+{lang=xml}
     <?xml version="1.0" encoding="utf-8"?>
     <resources>
         ...
@@ -155,18 +160,23 @@ resources directory.
 The following method will apply the appropriate content to the `ViewGroup`
 created from the layout:
 
+{lang=java}
     private void addContentToViewGroup(ViewGroup viewGroup)
     {
         if (mItem != null) {
-            TextView contentTextView = (TextView) viewGroup.findViewById(R.id.story_content);
+            TextView contentTextView = (TextView) viewGroup
+                                                .findViewById(R.id.story_content);
             if(contentTextView != null) {
-                contentTextView.setText(getResources().getText(mItem.contentResourceId));
+                contentTextView.setText(getResources()
+                               .getText(mItem.contentResourceId));
             }
-            TextView titleTextView = (TextView) viewGroup.findViewById(R.id.story_title);
+            TextView titleTextView = (TextView) viewGroup
+                                                .findViewById(R.id.story_title);
             if(titleTextView != null) {
                 titleTextView.setText(mItem.title);
             }
-            ImageView imageView = (ImageView) viewGroup.findViewById(R.id.story_image);
+            ImageView imageView = (ImageView) viewGroup
+                                                .findViewById(R.id.story_image);
             if(imageView != null) {
                 imageView.setImageResource(mItem.imageResourceId);
             }
@@ -175,13 +185,15 @@ created from the layout:
 
 where `mItem` is an instance of `StoryItem`:
 
+{lang=java}
     public static class StoryItem {
         public String id;
         public String title;
         public int contentResourceId;
         public int imageResourceId;
 
-        public StoryItem(String id, String title, int contentResourceId, int imageResourceId)
+        public StoryItem(String id, String title,
+                         int contentResourceId, int imageResourceId)
         {
             this.id = id;
             this.title = title;
@@ -203,6 +215,7 @@ manager, we make use of a property on the `Scene` object - `EnterAction`. This
 is a `Runnable` which will be run after the layout has been inflated, but
 before the transition is performed - ideal for loading content.
 
+{lang=java}
     // Just before the transition starts, ensure that the content has been loaded
     scene.setEnterAction(new Runnable() {
                              @Override
@@ -227,6 +240,7 @@ like to have control over.
 To start out we'll re-create the `AutoTransition` so that you can see what it
 is constructed from:
 
+{lang=java}
     private void performTransitionToScene(Scene scene) {
         Fade fadeOut = new Fade(Fade.OUT);
         ChangeBounds changeBounds = new ChangeBounds();
@@ -253,10 +267,12 @@ in addition to the `Scene`, a `Transition` can be supplied as well.
 
 In order to actually use this new method replace:
 
+{lang=java}
     TransitionManager.go(sceneList.get(tab.getPosition()));
 
 with:
 
+{lang=java}
     performTransitionToScene(sceneList.get(tab.getPosition()));
 
 
@@ -266,6 +282,7 @@ doing this is that you now have a lot more control over the transition itself.
 For example, we can update the transition method to set a duration on the
 individual segments of the transition:
 
+{lang=java}
     private void performTransitionToScene(Scene scene) {
         Fade fadeOut = new Fade(Fade.OUT);
         ChangeBounds changeBounds = new ChangeBounds();
@@ -306,6 +323,7 @@ at recreating the custom bounce transition we created above as an XML resource.
 Create a new XML resource in the __transition__ directory, and call it
 __bouncy_auto_transition.xml__. The root element should be `transitionSet`:
 
+{lang=xml}
     <?xml version="1.0" encoding="utf-8"?>
     <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
         android:transitionOrdering="sequential" >
@@ -327,8 +345,11 @@ understand - the `transitionOrdering` is specified as an attribute on the
 
 To use this new transition, update the `performTransitionToScene()` method:
 
-    TransitionInflater inflater = TransitionInflater.from(StoryDetailActivity.this);
-    Transition transition = inflater.inflateTransition(R.transition.bouncey_auto_transition);
+{lang=java}
+    TransitionInflater inflater = TransitionInflater
+                                                .from(StoryDetailActivity.this);
+    Transition transition = inflater
+                        .inflateTransition(R.transition.bouncey_auto_transition);
     TransitionManager.go(scene, transition);
 
 Here we create a `TransitionInflater` (using `StoryDetailActivity.this` because
@@ -352,6 +373,7 @@ of transitions - each of which specifies which scene is being transitioned
 from, which scene is being transitioned to, and which transition object should
 be used:
 
+{lang=xml}
     <?xml version="1.0" encoding="utf-8"?>
     <transitionManager xmlns:android="http://schemas.android.com/apk/res/android">
         <transition android:fromScene="@layout/content_scene_00"
@@ -366,6 +388,7 @@ be used:
 Here we've introduced a second transition type -
 __simultaneous_bounce_transition__:
 
+{lang=xml}
     <?xml version="1.0" encoding="utf-8"?>
     <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
         android:transitionOrdering="together">
@@ -389,6 +412,7 @@ then the default (`AutoTransition`) will be used.
 In order to use the new transition manager, we add a member variable to the
 activity to store a reference to it:
 
+{lang=java}
     /**
      * The transition manager, inflated from XML
      */
@@ -396,12 +420,16 @@ activity to store a reference to it:
 
 Then in `onCreate()` we create an inflater and create the transition manager:
 
+{lang=java}
     // Build the transition manager
     TransitionInflater transitionInflater = TransitionInflater.from(this);
-    mTransitionManager = transitionInflater.inflateTransitionManager(R.transition.story_transition_manager, container);
+    mTransitionManager = transitionInflater
+                .inflateTransitionManager(R.transition.story_transition_manager,
+                                          container);
 
 And then the `performTransitionToScene()` method simply becomes:
 
+{lang=java}
     private void performTransitionToScene(Scene scene) {
         mTransitionManager.transitionTo(scene);
     }
@@ -425,7 +453,7 @@ Although this article covered all the major parts of the new framework, there
 is still a lot to play with - it's worth taking a look at the docs and seeing
 what user-experience-enhancing animations you can come up with.
 
-As previously mentioned, all the code is available in the github repo at
+As previously mentioned, all the code is available at
 [github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
 If you have any problems or questions then do create a pull-request, pop
 something in below, or hit my up on twitter -
