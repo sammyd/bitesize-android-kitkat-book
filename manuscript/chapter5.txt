@@ -7,7 +7,8 @@ take a look at how to use this new functionality by building a sound meter app
 which will measure the level of the device audio output.
 
 The source code for this project is available in the GitHub repo at
-GITHUB_LINK_HERE. It's a gradle based project, and can easily be imported into
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
+It's a gradle based project, and can easily be imported into
 Android Studio. It has been tested using Android Studio 0.4.4.
 
 
@@ -27,6 +28,7 @@ The `SamplingSoundMeter` class has a constructor which takes just one argument -
 a so-called `SoundLevelUpdateable` object. We'll take a look at this interface in
 a moment.
 
+{lang=java}
     public class SamplingSoundMeter {
         private SoundLevelUpdateable updateable;
         private Handler handler;
@@ -42,12 +44,12 @@ a moment.
         ...
     }
 
-There are member variables for several components - including saving the provided
+There are member variables for several components - including saving the
 `SoundLevelUpdateable` object. We create a new `visualizer` object - providing
 the argument of `0`. This value is the audioSession. If you have a particular
 `MediaPlayer` or `AudioTrack` then you can specify the audio session to which it
 belongs to attach the `Visualizer` to the same session. Here we use a session ID
-of 0 - which means that the visualizer will apply to the output mix of the Android
+of `0` - which means that the visualizer will apply to the output mix of the Android
 device.
 
 Then we enable measurement mode on the visualizer, by setting the measurement mode to
@@ -57,6 +59,7 @@ available, but there could feasibly be additional options in the future.
 `SoundLevelUpdateable` is a simple interface, which allows the setting of peak and
 RMS values:
 
+{lang=java}
     public interface SoundLevelUpdateable {
         void setPeakValue(int peakValue);
         void setRmsValue(int rmsValue);
@@ -64,9 +67,10 @@ RMS values:
 
 This will allow the on-screen values to be updated as new samples are received.
 
-There are 2 additional public methods on the `SamplingSoundMeter` class - `Start()`
+There are two additional public methods on the `SamplingSoundMeter` class - `Start()`
 and `Stop()`.
 
+{lang=java}
     public void Start(final int intervalMillis) {
         // Stop it if we're already running
         Stop();
@@ -101,9 +105,11 @@ in the `Stop()` method, which also removes any remaining callbacks on the handle
 
 The `updateStatus()` method is as follows:
 
+{lang=java}
     private void updateStatus() {
         // Capture the sample
-        Visualizer.MeasurementPeakRms measurementPeakRms = new Visualizer.MeasurementPeakRms();
+        Visualizer.MeasurementPeakRms measurementPeakRms =
+                                            new Visualizer.MeasurementPeakRms();
         visualizer.getMeasurementPeakRms(measurementPeakRms);
         // Notify our updateable
         updateable.setPeakValue(measurementPeakRms.mPeak);
@@ -128,42 +134,51 @@ the other the RMS value).
 
 The fragment should implement the `SoundLevelUpdateable` interface:
 
-    public class SoundMeterFragment extends Fragment implements SoundLevelUpdateable {
+{lang=java}
+    public class SoundMeterFragment extends Fragment
+                                    implements SoundLevelUpdateable {
     }
 
 Which means there should be implementations of 2 update methods:
 
+{lang=java}
     @Override
     public void setPeakValue(int peakValue) {
-        ((TextView)getView().findViewById(R.id.textViewPeak)).setText("Peak: " + peakValue);
+        ((TextView)getView().findViewById(R.id.textViewPeak))
+                            .setText("Peak: " + peakValue);
     }
 
     @Override
     public void setRmsValue(int rmsValue) {
-        ((TextView)getView().findViewById(R.id.textViewRMS)).setText("RMS: " + rmsValue);
+        ((TextView)getView().findViewById(R.id.textViewRMS))
+                            .setText("RMS: " + rmsValue);
     }
 
 In `OnCreateView()` we create a `SamplingSoundMeter`, and then wire up the 2
 buttons:
 
+{lang=java}
     private SamplingSoundMeter samplingSoundMeter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sound_meter, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sound_meter,
+                                         container, false);
 
         samplingSoundMeter = new SamplingSoundMeter(this);
 
         // Add some button handlers
-        rootView.findViewById(R.id.soundmeter_start_button).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.soundmeter_start_button)
+                .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 samplingSoundMeter.Start(500);
             }
         });
 
-        rootView.findViewById(R.id.soundmeter_stop_button).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.soundmeter_stop_button)
+                .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 samplingSoundMeter.Stop();
@@ -207,4 +222,5 @@ architecture to the one we've created here today will allow you to create visual
 audio meters without much difficulty at all.
 
 Don't forget that all the code for today's __SoundOutputMeter__ project is
-available on Github at GITHUB_LINK_HERE.
+available on Github at
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).

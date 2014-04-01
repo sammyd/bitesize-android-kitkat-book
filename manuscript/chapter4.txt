@@ -43,7 +43,8 @@ which we will then wire up in the app manifest.
                     final Object[] pdusObj = (Object[]) bundle.get("pdus");
 
                     for(Object currentObj : pdusObj) {
-                        SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) currentObj);
+                        SmsMessage currentMessage = SmsMessage
+                                            .createFromPdu((byte[]) currentObj);
                         Message message = new Message(
                                 currentMessage.getDisplayMessageBody(),
                                 currentMessage.getDisplayOriginatingAddress(),
@@ -78,7 +79,8 @@ used inside the demo app we're creating:
         private String Recipient;
         private Date Time;
 
-        public Message(String content, String sender, String recipient, Date time) {
+        public Message(String content, String sender,
+                       String recipient, Date time) {
             Content = content;
             Sender = sender;
             Recipient = recipient;
@@ -121,7 +123,7 @@ messages are added:
 {lang=java}
     @Override
     public void update(Observable observable, Object data) {
-        // If the data adapter has changed then we need to reload the list dataadapter
+        // If the data adapter has changed then we need to reload it
         conversationArrayAdapter.notifyDataSetChanged();
     }
 
