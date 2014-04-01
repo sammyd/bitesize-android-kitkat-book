@@ -13,7 +13,8 @@ text-editor app, which will be able to open a text document stored in the cloud,
 edit it and save the changes.
 
 The code is available as part of the KitKat: finger-by-finger repo on Github at
-GITHUB_LINK_HERE. The project is a gradle project, and should be easy to import
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
+The project is a gradle project, and should be easy to import
 into Android Studio. It has been tested with Android Studio 0.4.4.
 
 
@@ -30,6 +31,7 @@ to be the best choice.
 The following code demonstrates how simple it is to present the user with an
 activity for navigation to and selection of a document:
 
+{lang=java}
     Intent openFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
     // Only want those items which can be opened
@@ -46,6 +48,7 @@ documents we wish to be shown. We should be able to open the files
 start the activity with `startActivityForResult()`. `READ_REQUEST_CODE` is a
 static `int` which we have previously defined:
 
+{lang=java}
     public static final int READ_REQUEST_CODE = 135;
 
 When the document selection activity completes it will call `onActivityResult()`
@@ -67,6 +70,7 @@ Once the user has completed the file selection in the document provider activity
 then our activity will get a callback to `OnActivityResult()`. The following
 demonstrates how to open the specified file:
 
+{lang=java}
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -76,7 +80,9 @@ demonstrates how to open the specified file:
                 currentOpenFileUri = data.getData();
                 Log.i(TAG, "URI: " + currentOpenFileUri.toString());
                 // Get hold of the content of the file
-                AsyncStringReader stringReader = new AsyncStringReader(getContentResolver(), textEditorFragment);
+                AsyncStringReader stringReader =
+                                        new AsyncStringReader(getContentResolver(),
+                                                              textEditorFragment);
                 stringReader.execute(currentOpenFileUri);
             }
         }
@@ -102,6 +108,7 @@ deal with any threading issues.
 
 Here we'll use an `AsyncTask` to read a string from a specified `Uri`:
 
+{lang=java}
     public class AsyncStringReader extends AsyncTask<Uri, Void, String>
 
 When subclassing we fix the 3 generic types - defining the task start parameters,
@@ -113,17 +120,19 @@ To construct an `AsyncStringReader` we require a `ContentResolver` to allow the
 file to be opened, and an `AsyncStringReaderCompletionHandler` which will be
 notified when the file has been read:
 
+{lang=java}
     private AsyncStringReaderCompletionHandler mCompletionHandler;
     private ContentResolver mContentResolver;
 
     public AsyncStringReader(ContentResolver contentResolver,
-                             AsyncStringReaderCompletionHandler completionHandler) {
+                          AsyncStringReaderCompletionHandler completionHandler) {
         mContentResolver   = contentResolver;
         mCompletionHandler = completionHandler;
     }
 
 Where `AsyncStringReaderCompletionHandler` is an interface:
 
+{lang=java}
     public interface AsyncStringReaderCompletionHandler {
             public void setText(String s);
     }
@@ -132,13 +141,15 @@ There are 4 possible methods we could override, but we actually need only two -
 the first being `doInBackground()`, which describes the task which is performed
 on the background thread:
 
+{lang=java}
     @Override
     protected String doInBackground(Uri... params) {
         String resultString = "";
         try{
             InputStream inputStream = mContentResolver.openInputStream(params[0]);
             if(inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                BufferedReader reader = new BufferedReader(
+                                                new InputStreamReader(inputStream));
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
                 while((line = reader.readLine()) != null) {
@@ -161,6 +172,7 @@ the file.
 The other method is `onPostExecute()`, which is run back on the main thread, and
 we use to send the file content to the completion handler:
 
+{lang=java}
     @Override
     protected void onPostExecute(String s) {
         mCompletionHandler.setText(s);
@@ -172,10 +184,13 @@ If you cast your mind back to when we used this string reader in the `onActivity
 method you'll remember that we passed in a `Fragment` subclass as the completion
 handler:
 
-    public class TextEditorFragment extends Fragment implements AsyncStringReaderCompletionHandler
+{lang=java}
+    public class TextEditorFragment extends Fragment
+                                    implements AsyncStringReaderCompletionHandler
 
 In the `TextEditorFragment` when we receive new text we save it in a member variable:
 
+{lang=java}
     private String mText;
     public void setText(String mOriginalText) {
         this.mText = mOriginalText;
@@ -184,6 +199,7 @@ In the `TextEditorFragment` when we receive new text we save it in a member vari
 
 And ensure that the text view is updated appropriately:
 
+{lang=java}
     private void UpdateTextView() {
         // Update the text view
         setEditTextContent(mText);
@@ -212,9 +228,14 @@ seamless, since the all the cleverness of the storage access framework is hidden
 away behind the `Uri` that you've been provided. Therefore, to save our updated
 string:
 
-    ParcelFileDescriptor pfd = mContentResolver.openFileDescriptor(params[0].uri, "w");
-    FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-    fileOutputStream.write(params[0].newContent.getBytes(Charset.forName("UTF-8")));
+{lang=java}
+    ParcelFileDescriptor pfd = mContentResolver
+                                    .openFileDescriptor(params[0].uri, "w");
+    FileOutputStream fileOutputStream = 
+                                    new FileOutputStream(pfd.getFileDescriptor());
+    fileOutputStream.write(params[0]
+                           .newContent
+                           .getBytes(Charset.forName("UTF-8")));
     fileOutputStream.close();
     pfd.close();
 
@@ -228,11 +249,14 @@ String. This really is simplicity itself - excellent.
 In the same way that we created an async string reader, we're going to use a
 writer as well.
 
-    public class AsyncStringWriter extends AsyncTask<AsyncStringWriterParams, Void, Boolean>
+{lang=java}
+    public class AsyncStringWriter
+           extends AsyncTask<AsyncStringWriterParams, Void, Boolean>
 
 The `Param` type is a custom class which encapsulates the `Uri` of the document
 to save, and `String` of the new content:
 
+{lang=java}
     public class AsyncStringWriterParams {
         public Uri uri;
         public String newContent;
@@ -243,19 +267,21 @@ to save, and `String` of the new content:
         }
     }
 
-The constructor will again require a `ContentResolver`, as well as an
-`AsyncStringWriterCompletionHandler`:
+The constructor will require a `AsyncStringWriterCompletionHandler`, in addition 
+to a `ContentResolver` as before.
 
+{lang=java}
     private ContentResolver mContentResolver;
     private AsyncStringWriterCompletionHandler mCompletionHandler;
     public AsyncStringWriter(ContentResolver contentResolver,
-                             AsyncStringWriterCompletionHandler completionHandler) {
+                          AsyncStringWriterCompletionHandler completionHandler) {
         mContentResolver = contentResolver;
         mCompletionHandler = completionHandler;
     }
 
 where
 
+{lang=java}
     public interface AsyncStringWriterCompletionHandler {
         public void StringSaved(Boolean success);
     }
@@ -263,13 +289,18 @@ where
 The `doInBackground()` method performs the actual saving of the document, as
 detailed above:
 
+{lang=java}
     @Override
     protected Boolean doInBackground(AsyncStringWriterParams... params) {
         Boolean success = false;
         try {
-            ParcelFileDescriptor pfd = mContentResolver.openFileDescriptor(params[0].uri, "w");
-            FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-            fileOutputStream.write(params[0].newContent.getBytes(Charset.forName("UTF-8")));
+            ParcelFileDescriptor pfd = mContentResolver
+                                       .openFileDescriptor(params[0].uri, "w");
+            FileOutputStream fileOutputStream =
+                                    new FileOutputStream(pfd.getFileDescriptor());
+            fileOutputStream.write(params[0]
+                                   .newContent
+                                   .getBytes(Charset.forName("UTF-8")));
             fileOutputStream.close();
             pfd.close();
             success = true;
@@ -284,6 +315,7 @@ detailed above:
 and on completion, we return a `Boolean` specifying whether or not the save was
 successful:
 
+{lang=java}
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         mCompletionHandler.StringSaved(aBoolean);
@@ -295,16 +327,22 @@ successful:
 In our activity we have a `SaveText()` method which creates an `AsyncStringWriter`
 and uses it to save the new text to the open file's location:
 
+{lang=java}
     @Override
     public void SaveText(String text) {
         Log.i(TAG, "Save the updated text");
-        AsyncStringWriter stringWriter = new AsyncStringWriter(getContentResolver(), textEditorFragment);
-        AsyncStringWriterParams params = new AsyncStringWriterParams(currentOpenFileUri, text);
+        AsyncStringWriter stringWriter =
+                                        new AsyncStringWriter(getContentResolver(),
+                                                              textEditorFragment);
+        AsyncStringWriterParams params =
+                                    new AsyncStringWriterParams(currentOpenFileUri,
+                                                                text);
         stringWriter.execute(params);
     }
 
 This method is wired in to a button on the activity bar inside the editor fragment:
 
+{lang=java}
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.edit_text_save) {
@@ -349,6 +387,8 @@ storage providers so that it's really easy for users to interact with their
 different sources.
 
 Don't forget that the source code for this simple cloud text editor is all
-available on Github at INSERT_GITHUB_LINK. If you have any questions or comments,
+available on Github at
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
+If you have any questions or comments,
 don't hesitate to pop them in below, on Github or hit me up on twitter
 [@iwantmyrealname](https://twitter.com/iwantmyrealname).
