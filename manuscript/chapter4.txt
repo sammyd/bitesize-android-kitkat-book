@@ -13,7 +13,7 @@ receive SMS messages without taking the responsibility of being the default SMS
 app on the device.
 
 The code for the app which accompanies this article is available on Github at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
 It was developed in Android Studio 0.4.4 and therefore is a
 gradle project. Any problems then feel free to give me a shout or create a pull
 request to fix it :)
@@ -345,8 +345,8 @@ system. There are a couple of options available to you to set this. The first
 is using the Android settings app:
 
 ![Choose the more section](images/chapter4/sms_settings_default_app_1.png)
-![Default SMS app](sms_settings_default_app_2.png)
-![2 Options](sms_settings_default_app_3.png)
+![Default SMS app](images/chapter4/sms_settings_default_app_2.png)
+![2 Options](images/chapter4/sms_settings_default_app_3.png)
 
 
 ### In-App Default App Override
@@ -400,7 +400,7 @@ yourself. There's some really powerful functionality provided here, just
 remember to use it wisely :)
 
 The code is available on github at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat)
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat)
 - feel free to fork it and send me pull requests. If you have any questions or
 comments either pop them in below, or grab me on twitter -
 [@iwantmyrealname](https://twitter.com/iwantmyrealname).

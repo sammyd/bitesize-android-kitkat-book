@@ -1,8 +1,7 @@
 # Preface
 
+{float=right}
 ![](images/logo_big.png)
-
-
 
 If you have any comments or corrections for the book then do let me know - I'm
 [@iwantmyrealname](https://twitter.com/iwantmyrealname) on twitter.

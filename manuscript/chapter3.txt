@@ -13,7 +13,7 @@ text-editor app, which will be able to open a text document stored in the cloud,
 edit it and save the changes.
 
 The code is available as part of the KitKat: finger-by-finger repo on Github at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
 The project is a gradle project, and should be easy to import
 into Android Studio. It has been tested with Android Studio 0.4.4.
 
@@ -388,7 +388,7 @@ different sources.
 
 Don't forget that the source code for this simple cloud text editor is all
 available on Github at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
 If you have any questions or comments,
 don't hesitate to pop them in below, on Github or hit me up on twitter
 [@iwantmyrealname](https://twitter.com/iwantmyrealname).

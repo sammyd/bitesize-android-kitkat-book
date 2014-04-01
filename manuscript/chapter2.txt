@@ -13,7 +13,7 @@ In this article we'll take a look at how to create content to provide to the
 print service - at how to add printing capabilities to your KitKat-enabled app.
 
 There is an accompanying demo app with complete source code available on GitHub - 
-at [github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
+at [github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
 It was written and tested in AndroidStudio 0.4.4, so you
 should be able to get it running as a gradle project in either AndroidStudio or
 Eclipse.
@@ -491,7 +491,7 @@ themselves with the printing framework. For more information, check out the
 pages about `android.printservice` on [developer.android.com](http://developer.android.com/reference/android/printservice/package-summary.html).
 
 The code for the accompanying project is available on GitHub at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat). 
 Go grab it and give it a try - let me know if
 you have any comments or feedback on
 GitHub or on twitter [@iwantmyrealname](https://twitter.com/iwantmyrealname). 

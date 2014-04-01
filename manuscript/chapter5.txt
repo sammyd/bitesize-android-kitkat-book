@@ -7,7 +7,7 @@ take a look at how to use this new functionality by building a sound meter app
 which will measure the level of the device audio output.
 
 The source code for this project is available in the GitHub repo at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
 It's a gradle based project, and can easily be imported into
 Android Studio. It has been tested using Android Studio 0.4.4.
 
@@ -223,4 +223,4 @@ audio meters without much difficulty at all.
 
 Don't forget that all the code for today's __SoundOutputMeter__ project is
 available on Github at
-[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
+[github.com/ShinobiControls/bitesize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
