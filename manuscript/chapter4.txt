@@ -13,7 +13,7 @@ receive SMS messages without taking the responsibility of being the default SMS
 app on the device.
 
 The code for the app which accompanies this article is available on Github at
-[github.com/ShinobiControls/Xamarin-cross-platform-charting](https://github.com/ShinobiControls/Xamarin-cross-platform-charting).
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat).
 It was developed in Android Studio 0.4.4 and therefore is a
 gradle project. Any problems then feel free to give me a shout or create a pull
 request to fix it :)
@@ -29,6 +29,7 @@ KitKat has added.
 In order to handle incoming SMS messages we need to create a `BroadcastReceiver`,
 which we will then wire up in the app manifest.
 
+{lang=java}
     public class SMSBroadcastReceiver extends BroadcastReceiver {
         public SMSBroadcastReceiver() {
         }
@@ -69,6 +70,7 @@ welcome).
 We push the detail into a simple `Message` object, which is just one of the models
 used inside the demo app we're creating:
 
+{lang=java}
     public class Message {
 
         private String Content;
@@ -96,6 +98,7 @@ app this should be persisted carefully, but for the purposes of this demo the
 messages are sorted into 'conversations' (i.e. messages to and from a single
 address) and then made accessible to the UI:
 
+{lang=java}
     public void addMessage(Message message) {
         if(conversationMap.containsKey(message.getSender())) {
             // Can add the message to an existing conversation
@@ -115,6 +118,7 @@ address) and then made accessible to the UI:
 The `DataProvider` is an `Observable` so that the UI can be updated as new
 messages are added:
 
+{lang=java}
     @Override
     public void update(Observable observable, Object data) {
         // If the data adapter has changed then we need to reload the list dataadapter
@@ -124,6 +128,7 @@ messages are added:
 Now that we've created the `BroadcastReceiver` it needs to be registered in the
 app manifest - inside the `application` tag:
 
+{lang=xml}
     <receiver
         android:name="com.shinobicontrols.messageme.receivers.SMSBroadcastReceiver"
         android:enabled="true"
@@ -136,6 +141,7 @@ app manifest - inside the `application` tag:
 
 And we must request the appropriate permissions, inside the manifest section:
 
+{lang=xml}
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
@@ -153,11 +159,13 @@ responds as expected.
 
 To open a connection:
 
+{lang=bash}
     telnet localhost 5554
 
 Where the port number is displayed at the top of your emulator. Then you can
 use the following command to send an SMS message
 
+{lang=bash}
     sms send <Sender Number> <Message>
 
 For example:
@@ -207,6 +215,7 @@ to incoming calls
 We've already created a broadcast receiver for SMS - nothing has changed with the
 class itself, we just need to wire it slightly differently in the app manifest:
 
+{lang=xml}
     <!-- BroadcastReceiver that listens to incoming SMS messages -->
     <receiver
         android:name="com.shinobicontrols.messageme.receivers.SMSBroadcastReceiver"
@@ -228,6 +237,7 @@ actually going to provide a useful implementation, and hence this sample code
 wouldn't be appropriate for production use - every time a MMS arrives then the
 app would crash:
 
+{lang=java}
     public class MMSBroadcastReceiver extends BroadcastReceiver {
         public MMSBroadcastReceiver() {
         }
@@ -242,6 +252,7 @@ app would crash:
 
 The manifest file needs updating in a similar way:
 
+{lang=xml}
     <!-- BroadcastReceiver that listens to incoming MMS messages -->
     <receiver
         android:name="com.shinobicontrols.messageme.receivers.MMSBroadcastReceiver"
@@ -262,6 +273,7 @@ messaging app should be able to display the message to them and provide sending
 capability. This requires an activity be able to handle a couple of intents - 
 `SEND` and `SENDTO`. This is done by updating the manifest as follows:
 
+{lang=xml}
     <!-- Activity for composing SMS/MMS messages -->
     <activity
         android:name="com.shinobicontrols.messageme.ComposeSMSActivity"
@@ -281,6 +293,7 @@ capability. This requires an activity be able to handle a couple of intents -
 The moment that you actually want to send an SMS message you need to get hold of
 the `SmsManager` and call `sendTextMessage()` on it:
 
+{lang=java}
     SmsManager smsManager = SmsManager.getDefault();
     smsManager.sendTextMessage(recipient, "ME", message, null, null);
 
@@ -298,6 +311,7 @@ creating a fully-featured SMS app, but it is beyond the scope of this post.
 In order to wire this service, add the following to the `<application>` section
 of __AndroidManifest.xml__
 
+{lang=xml}
     <!-- Service that delivers messages for "Quick Response" -->
     <service
         android:name="com.shinobicontrols.messageme.HeadlessSmsSendService"
@@ -341,6 +355,7 @@ app within an app. KitKat provides an activity which manages the changing of
 the default SMS app, so all you have to do is create an appropriate intent, and
 then fire off the `startActivity()` method:
 
+{lang=java}
     Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
     final String packageName = getActivity().getPackageName();
     intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, packageName);
@@ -351,6 +366,7 @@ button. This button only appears if the current app isn't the default SMS app.
 To test this we compare the name of the current app with that of the default
 SMS app:
 
+{lang=java}
     final String packageName = getActivity().getPackageName();
     if(!Telephony.Sms.getDefaultSmsPackage(getActivity()).equals(packageName)) {
         // We aren't default - do something!
@@ -382,7 +398,7 @@ yourself. There's some really powerful functionality provided here, just
 remember to use it wisely :)
 
 The code is available on github at
-[github.com/ShinobiControls/Xamarin-cross-platform-charting](https://github.com/ShinobiControls/Xamarin-cross-platform-charting)
+[github.com/ShinobiControls/bitwsize-kitkat](https://github.com/ShinobiControls/bitesize-kitkat)
 - feel free to fork it and send me pull requests. If you have any questions or
 comments either pop them in below, or grab me on twitter -
 [@iwantmyrealname](https://twitter.com/iwantmyrealname).
